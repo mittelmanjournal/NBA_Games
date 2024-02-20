@@ -39,19 +39,19 @@ public class Game extends DatabaseItem {
 		byte[] compressedContents;
 		try {
 			compressedContents = Compressible.compress(contents);
-			try (FileOutputStream fos = new FileOutputStream(new File(getWritePath()))) {
+			try (FileOutputStream fos = new FileOutputStream(new File(getWritePath() + ".txt"))) {
 				fos.write(compressedContents);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		return new File(getWritePath());
+		return new File(getWritePath() + ".txt");
 	}
 
 	public String decompressToString() {
 		try {
-			return Decompressible.decompress(new File(getWritePath())); // maybe just make it a class var of file
+			return Decompressible.decompress(new File(getWritePath() + ".txt")); // maybe just make it a class var of file
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,19 +60,6 @@ public class Game extends DatabaseItem {
 
 	public Document decompressToDocument() {
 		return Jsoup.parse(decompressToString());
-	}
-
-	private void removeExtraDivs(Document gamePage, String[] divs) {
-		for (String str : divs)
-			removeExtraDiv(gamePage, str);
-	}
-
-	private void removeExtraDiv(Document gamePage, String str) {
-		gamePage.selectFirst("div" + str).remove();
-	}
-
-	private String getWritePath() {
-		return getPath() + getId() + ".txt";
 	}
 
 	protected String createLink() {
