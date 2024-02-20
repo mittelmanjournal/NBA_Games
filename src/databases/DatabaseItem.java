@@ -2,6 +2,8 @@ package databases;
 
 import java.io.File;
 
+import org.jsoup.nodes.Document;
+
 public abstract class DatabaseItem {
 	protected final static String LINK_BASE = "https://www.pro-football-reference.com";
 	private String id;
@@ -114,6 +116,19 @@ public abstract class DatabaseItem {
 		// turn each of these variables' checks into
 		// their own methods, if we ever need to
 		// only check one
+	}
+	
+	protected void removeExtraDivs(Document gamePage, String[] divs) {
+		for (String str : divs)
+			removeExtraDiv(gamePage, str);
+	}
+
+	protected void removeExtraDiv(Document gamePage, String str) {
+		gamePage.selectFirst("div" + str).remove();
+	}
+	
+	protected String getWritePath() {
+		return getPath() + getId();
 	}
 
 	/*--------------------------------- GETTERS & SETTERS ---------------------------------*/
